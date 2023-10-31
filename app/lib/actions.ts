@@ -30,8 +30,7 @@ const InvoiceSchema = zod.object({
 });
 
 const CreateInvoice = InvoiceSchema.omit({ id: true, date: true });
-const UpdateInvoice = InvoiceSchema.omit({ date: true });
-const DeleteInvoice = InvoiceSchema.pick({ id: true });
+const UpdateInvoice = InvoiceSchema.omit({ date: true, id: true });
 
 export async function createInvoice(prevState: State, formData: FormData) {
   const validatedFields = CreateInvoice.safeParse({
@@ -66,9 +65,12 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-export async function updateInvoice(prevState: State, formData: FormData) {
+export async function updateInvoice(
+  id: string,
+  prevState: State,
+  formData: FormData
+) {
   const validatedFields = UpdateInvoice.safeParse({
-    id: formData.get('id'),
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
     status: formData.get('status'),
@@ -81,7 +83,7 @@ export async function updateInvoice(prevState: State, formData: FormData) {
     };
   }
 
-  const { amount, customerId, status, id } = validatedFields.data;
+  const { amount, customerId, status } = validatedFields.data;
   const amountInCents = amount * 100;
 
   try {
@@ -100,11 +102,7 @@ export async function updateInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-export async function deleteInvoice(formData: FormData) {
-  const { id } = DeleteInvoice.parse({
-    id: formData.get('id'),
-  });
-
+export async function deleteInvoice(id: string) {
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     revalidatePath('/dashboard/invoices');
