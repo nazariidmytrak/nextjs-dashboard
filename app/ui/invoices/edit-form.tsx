@@ -95,10 +95,10 @@ export default function EditInvoiceForm({
         </div>
 
         {/* Invoice Status */}
-        <div>
-          <label htmlFor='status' className='mb-2 block text-sm font-medium'>
+        <fieldset>
+          <legend className='mb-2 block text-sm font-medium'>
             Set the invoice status
-          </label>
+          </legend>
           <div className='rounded-md border border-gray-200 bg-white px-[14px] py-3'>
             <div className='flex gap-4'>
               <div className='flex items-center'>
@@ -135,7 +135,7 @@ export default function EditInvoiceForm({
               </div>
             </div>
           </div>
-        </div>
+        </fieldset>
       </div>
       <div className='mt-6 flex justify-end gap-4'>
         <Link
